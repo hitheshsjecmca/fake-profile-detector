@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fake Profile Detector</title>
+</head>
+<body>
+
+    <h1>Fake Profile Detector</h1>
+
+    <form action="/predict" method="POST">
+
+        <label>Profile Picture (0 or 1):</label>
+        <input type="text" name="profile_pic"><br><br>
+
+        <label>Nums/Length Username:</label>
+        <input type="text" name="nums_username"><br><br>
+
+        <label>Fullname Words:</label>
+        <input type="text" name="fullname_words"><br><br>
+
+        <label>Nums/Length Fullname:</label>
+        <input type="text" name="nums_fullname"><br><br>
+
+        <label>Name == Username:</label>
+        <input type="text" name="name_username"><br><br>
+
+        <label>Description Length:</label>
+        <input type="text" name="description_length"><br><br>
+
+        <label>External URL:</label>
+        <input type="text" name="external_url"><br><br>
+
+        <label>Private Account:</label>
+        <input type="text" name="private"><br><br>
+
+        <label>Posts:</label>
+        <input type="text" name="posts"><br><br>
+
+        <label>Followers:</label>
+        <input type="text" name="followers"><br><br>
+
+        <label>Follows:</label>
+        <input type="text" name="follows"><br><br>
+
+        <button type="submit">Detect Profile</button>
+
+    </form>
+
+</body>
+</html>
