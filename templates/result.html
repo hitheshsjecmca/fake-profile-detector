@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Uploaded Image</title>
+    <title>OCR Result</title>
 </head>
 <body>
 
     <h1>Image Uploaded Successfully ✅</h1>
 
-    <img src="{{ image_path }}" width="300">
+    <!-- Uploaded Profile Screenshot -->
+    <h2>Uploaded Profile Screenshot:</h2>
+
+    <img src="{{ image_path }}" width="350">
 
     <br><br>
+
+    <!-- OCR Extracted Text -->
+    <h2>Extracted Text:</h2>
+
+    <pre>{{ extracted_text }}</pre>
+
+    <br>
 
     <a href="/">Upload Another Image</a>
 

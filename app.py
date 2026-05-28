@@ -1,3 +1,6 @@
+import pytesseract
+from PIL import Image
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 from flask import Flask, render_template, request
 import os
 
@@ -26,10 +29,17 @@ def upload():
 
     file.save(filepath)
 
+    # Open image
+    image = Image.open(filepath)
+
+    # OCR Text Extraction
+    extracted_text = pytesseract.image_to_string(image)
+
     return render_template(
-        'result.html',
-        image_path=filepath
-    )
+    'result.html',
+    image_path=filepath,
+    extracted_text=extracted_text
+)
 
 if __name__ == '__main__':
     app.run(debug=True)
