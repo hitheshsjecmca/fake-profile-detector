@@ -5,44 +5,15 @@
 </head>
 <body>
 
-    <h1>Fake Profile Detector</h1>
+    <h1>Upload Instagram Profile Screenshot</h1>
 
-    <form action="/predict" method="POST">
+    <form action="/upload" method="POST" enctype="multipart/form-data">
 
-        <label>Profile Picture (0 or 1):</label>
-        <input type="text" name="profile_pic"><br><br>
+        <input type="file" name="profile_image" required>
 
-        <label>Nums/Length Username:</label>
-        <input type="text" name="nums_username"><br><br>
+        <br><br>
 
-        <label>Fullname Words:</label>
-        <input type="text" name="fullname_words"><br><br>
-
-        <label>Nums/Length Fullname:</label>
-        <input type="text" name="nums_fullname"><br><br>
-
-        <label>Name == Username:</label>
-        <input type="text" name="name_username"><br><br>
-
-        <label>Description Length:</label>
-        <input type="text" name="description_length"><br><br>
-
-        <label>External URL:</label>
-        <input type="text" name="external_url"><br><br>
-
-        <label>Private Account:</label>
-        <input type="text" name="private"><br><br>
-
-        <label>Posts:</label>
-        <input type="text" name="posts"><br><br>
-
-        <label>Followers:</label>
-        <input type="text" name="followers"><br><br>
-
-        <label>Follows:</label>
-        <input type="text" name="follows"><br><br>
-
-        <button type="submit">Detect Profile</button>
+        <button type="submit">Upload Image</button>
 
     </form>
 
