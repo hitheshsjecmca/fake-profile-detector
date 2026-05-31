@@ -185,7 +185,7 @@ def upload():
 
     username = tokens[0] if len(tokens) > 0 else "unknown"
 
-    fullname_words = len(username.split())
+    fullname_words = len(cleaned_text.split())
 
     digit_ratio = (
         sum(c.isdigit() for c in username)
@@ -210,6 +210,95 @@ def upload():
         followers / (following + 1)
     )
 
+    trust_score = 100
+
+    if posts < 5:
+        trust_score -= 20
+
+    if followers < 50:
+        trust_score -= 20
+
+    if following > followers * 3:
+        trust_score -= 20
+
+    if private_account:
+        trust_score += 5
+
+    trust_score = max(0, min(100, trust_score))
+
+    bot_probability = 0
+
+    if following > followers * 3:
+        bot_probability += 40
+
+    if posts < 3:
+        bot_probability += 30
+
+    if followers < 20:
+        bot_probability += 20
+
+    bot_probability = min(bot_probability, 100)
+    
+    digit_count = sum(
+    c.isdigit()
+    for c in username
+)
+
+    username_risk = "Low"
+
+    if digit_count >= 3:
+        username_risk = "Medium"
+
+    if digit_count >= 6:
+        username_risk = "High"
+
+
+    scam_keywords = [
+        "crypto",
+        "bitcoin",
+        "investment",
+        "giveaway",
+        "lottery",
+        "winner",
+        "earn money",
+        "free money"
+    ]
+
+
+    bio_risk = "Safe"
+
+    for word in scam_keywords:
+        if word in cleaned_text.lower():
+            bio_risk = "Suspicious"
+            break
+
+    reasons = []
+
+    if posts < 5:
+        reasons.append(
+            "Very low post count"
+        )
+
+    if following > followers * 3:
+        reasons.append(
+            "High following ratio"
+        )
+
+    if username_risk == "High":
+        reasons.append(
+            "Suspicious username pattern"
+        )
+
+    if bio_risk == "Suspicious":
+        reasons.append(
+            "Potential scam keywords detected"
+        )
+
+    if private_account:
+        reasons.append(
+            "Private account detected"
+        )
+     
 
     features = np.array([[
         1,                     
@@ -269,16 +358,22 @@ def upload():
     print(confidence)
 
     return render_template(
-        "result.html",
-        image_path=filepath,
-        extracted_text=cleaned_text,
-        posts=posts,
-        followers=followers,
-        following=following,
-        prediction=result,
-        confidence=confidence,
-        risk_level=risk_level
-    )
+    "result.html",
+    image_path=filepath,
+    extracted_text=cleaned_text,
+    posts=posts,
+    followers=followers,
+    following=following,
+    prediction=result,
+    confidence=confidence,
+    risk_level=risk_level,
+
+    trust_score=trust_score,
+    bot_probability=bot_probability,
+    username_risk=username_risk,
+    bio_risk=bio_risk,
+    reasons=reasons
+)
 
 if __name__ == "__main__":
     app.run(debug=True)

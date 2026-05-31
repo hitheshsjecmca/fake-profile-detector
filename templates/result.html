@@ -30,6 +30,23 @@
 </ul>
 
     <pre>{{ extracted_text }}</pre>
+    <h2>Cybersecurity Analysis</h2>
+
+    <p><strong>Trust Score:</strong> {{ trust_score }}/100</p>
+
+    <p><strong>Bot Probability:</strong> {{ bot_probability }}%</p>
+
+    <p><strong>Username Risk:</strong> {{ username_risk }}</p>
+
+    <p><strong>Bio Risk:</strong> {{ bio_risk }}</p>
+
+    <h3>Analysis Reasons</h3>
+
+    <ul>
+    {% for reason in reasons %}
+        <li>{{ reason }}</li>
+    {% endfor %}
+    </ul>
 
     <br>
 
