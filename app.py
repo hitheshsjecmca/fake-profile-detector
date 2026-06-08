@@ -361,6 +361,7 @@ def upload():
 
     return render_template(
     "result.html",
+    username=username,
     image_path=filepath.replace("\\", "/"),
     extracted_text=cleaned_text,
     posts=posts,

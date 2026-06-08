@@ -37,9 +37,15 @@
 
                 <h3>
                     Prediction:
-                    <span class="text-danger">
+                    {% if prediction == "Fake Profile" %}
+                    <span class="badge bg-danger fs-5">
                         {{ prediction }}
                     </span>
+                     {% else %}
+                    <span class="badge bg-success fs-5">
+                        {{ prediction }}
+                    </span>
+                {% endif %}
                 </h3>
 
                 <h5>
@@ -82,7 +88,16 @@
 
                         <h5>🛡 Trust Score</h5>
 
-                        <h2>{{ trust_score }}</h2>
+                        <h2>{{ trust_score }}%</h2>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar bg-success"
+                                style="width: {{ trust_score }}%"
+                            >
+                                {{ trust_score }}%
+                            </div>
+                        </div>
 
                     </div>
 
@@ -99,6 +114,15 @@
                         <h5>🤖 Bot Probability</h5>
 
                         <h2>{{ bot_probability }}%</h2>
+
+                            <div class="progress">
+                                <div
+                                    class="progress-bar bg-danger"
+                                    style="width: {{ bot_probability }}%"
+                                >
+                                    {{ bot_probability }}%
+                                </div>
+                            </div>
 
                     </div>
 
@@ -171,16 +195,6 @@
         </ul>
 
         <hr>
-
-        <h3>
-            🔍 OCR Extracted Text
-        </h3>
-
-        <div class="alert alert-secondary">
-
-            <pre>{{ extracted_text }}</pre>
-
-        </div>
 
         <div class="text-center mt-4">
 
