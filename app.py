@@ -333,14 +333,16 @@ def upload():
     )
 
 
-    if confidence >= 90:
-        risk_level = "Highly Suspicious"
+    if prediction == 1:
 
-    elif confidence >= 70:
-        risk_level = "Suspicious"
+        if confidence >= 90:
+            risk_level = "Highly Suspicious"
 
-    elif confidence >= 50:
-        risk_level = "Moderate Risk"
+        elif confidence >= 70:
+            risk_level = "Suspicious"
+
+        else:
+            risk_level = "Moderate Risk"
 
     else:
         risk_level = "Likely Genuine"
@@ -359,7 +361,7 @@ def upload():
 
     return render_template(
     "result.html",
-    image_path=filepath,
+    image_path=filepath.replace("\\", "/"),
     extracted_text=cleaned_text,
     posts=posts,
     followers=followers,

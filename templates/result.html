@@ -1,56 +1,201 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>OCR Result</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analysis Result</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
-<body>
 
-    <h1>Image Uploaded Successfully ✅</h1>
+<body class="bg-light">
 
-    <!-- Uploaded Profile Screenshot -->
-    <h2>Uploaded Profile Screenshot:</h2>
+<div class="container mt-5">
 
-    <img src="{{ image_path }}" width="350">
+    <div class="card shadow-lg p-4">
 
-    <br><br>
+        <h1 class="text-center mb-4">
+            📊 Profile Analysis Report
+        </h1>
 
-    <!-- OCR Extracted Text -->
-    <h2>Extracted Text:</h2>
-    <h2>Detected Profile Statistics:</h2>
-        <h2>AI Prediction Result:</h2>
+        <div class="row">
 
-    <h3>{{ prediction }}</h3>
+            <div class="col-md-4 text-center">
 
-    <h3>Confidence Score: {{ confidence }}%</h3>
-<ul>
-    <li><strong>Posts:</strong> {{ posts }}</li>
-    <li><strong>Followers:</strong> {{ followers }}</li>
-    <li><strong>Following:</strong> {{ following }}</li>
-</ul>
-</ul>
+                <img
+                    src="/{{ image_path }}"
+                    class="img-fluid rounded shadow"
+                    alt="Uploaded Image"
+                >
 
-    <pre>{{ extracted_text }}</pre>
-    <h2>Cybersecurity Analysis</h2>
+            </div>
 
-    <p><strong>Trust Score:</strong> {{ trust_score }}/100</p>
+            <div class="col-md-8">
 
-    <p><strong>Bot Probability:</strong> {{ bot_probability }}%</p>
+                <h3>
+                    Prediction:
+                    <span class="text-danger">
+                        {{ prediction }}
+                    </span>
+                </h3>
 
-    <p><strong>Username Risk:</strong> {{ username_risk }}</p>
+                <h5>
+                    Confidence Score:
+                    {{ confidence }}%
+                </h5>
 
-    <p><strong>Bio Risk:</strong> {{ bio_risk }}</p>
+                <div class="progress mb-3">
 
-    <h3>Analysis Reasons</h3>
+                    <div
+                     class="progress-bar"
+                        role="progressbar"
+                        aria-valuenow="{{ confidence }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        style="width: {{ confidence|int }}%;">
+                        {{ confidence }}%
+                    </div>
 
-    <ul>
-    {% for reason in reasons %}
-        <li>{{ reason }}</li>
-    {% endfor %}
-    </ul>
+                </div>
 
-    <br>
+                <h5>
+                    Risk Level:
+                    {{ risk_level }}
+                </h5>
 
-    <a href="/">Upload Another Image</a>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="card text-center shadow-sm">
+
+                    <div class="card-body">
+
+                        <h5>🛡 Trust Score</h5>
+
+                        <h2>{{ trust_score }}</h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card text-center shadow-sm">
+
+                    <div class="card-body">
+
+                        <h5>🤖 Bot Probability</h5>
+
+                        <h2>{{ bot_probability }}%</h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card text-center shadow-sm">
+
+                    <div class="card-body">
+
+                        <h5>⚠ Username Risk</h5>
+
+                        <h2>{{ username_risk }}</h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <h3>
+            📈 Extracted Profile Data
+        </h3>
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Posts</th>
+                <td>{{ posts }}</td>
+            </tr>
+
+            <tr>
+                <th>Followers</th>
+                <td>{{ followers }}</td>
+            </tr>
+
+            <tr>
+                <th>Following</th>
+                <td>{{ following }}</td>
+            </tr>
+
+            <tr>
+                <th>Bio Risk</th>
+                <td>{{ bio_risk }}</td>
+            </tr>
+
+        </table>
+
+        <hr>
+
+        <h3>
+            📝 Detection Reasons
+        </h3>
+
+        <ul>
+
+            {% for reason in reasons %}
+
+            <li>{{ reason }}</li>
+
+            {% endfor %}
+
+        </ul>
+
+        <hr>
+
+        <h3>
+            🔍 OCR Extracted Text
+        </h3>
+
+        <div class="alert alert-secondary">
+
+            <pre>{{ extracted_text }}</pre>
+
+        </div>
+
+        <div class="text-center mt-4">
+
+            <a
+                href="/"
+                class="btn btn-primary"
+            >
+                Analyze Another Profile
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
