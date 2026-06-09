@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Security Intelligence Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #111827
+    );
+
+    color:white;
+    min-height:100vh;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.subtitle{
+    color:#9ca3af;
+}
+
+.dashboard-card{
+
+    background:#1f2937;
+
+    border:none;
+
+    border-radius:18px;
+
+    color:white;
+
+    transition:all 0.3s ease;
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.metric{
+
+    font-size:2.5rem;
+
+    font-weight:bold;
+}
+
+.progress{
+
+    height:25px;
+
+    border-radius:15px;
+}
+
+.chart-container{
+
+    width:350px;
+
+    margin:auto;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <div class="header">
+
+        <h1 class="display-4 fw-bold">
+
+            Security Intelligence Dashboard
+
+        </h1>
+
+        <p class="subtitle fs-5">
+
+            Social Media Threat Monitoring & Profile Analysis
+
+        </p>
+
+    </div>
+
+    <!-- STATUS -->
+
+    <div class="alert alert-success text-center">
+
+        System Status : Active
+
+        |
+        Profiles Analyzed :
+        {{ total_scans }}
+
+    </div>
+
+    <!-- METRICS -->
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <div class="card-body text-center">
+
+                    <h5>Total Scans</h5>
+
+                    <div class="metric">
+                        {{ total_scans }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <div class="card-body text-center">
+
+                    <h5>Verified Profiles</h5>
+
+                    <div class="metric text-success">
+
+                        {{ real_profiles }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <div class="card-body text-center">
+
+                    <h5>Suspicious Profiles</h5>
+
+                    <div class="metric text-danger">
+
+                        {{ fake_profiles }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <div class="card-body text-center">
+
+                    <h5>Authenticity Score</h5>
+
+                    <div class="metric text-info">
+
+                        {{ avg_trust }}%
+
+                    </div>
+
+                    <div class="progress mt-3">
+
+                        <div
+                        class="progress-bar bg-info"
+                        style="width: {{ avg_trust }}%;">
+
+                        {{ avg_trust }}%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AI CONFIDENCE -->
+
+    <div class="card dashboard-card mt-4">
+
+        <div class="card-body text-center">
+
+            <h4>
+
+                AI Detection Confidence
+
+            </h4>
+
+            <h2>
+
+                {{ avg_confidence }}%
+
+            </h2>
+
+            <div class="progress mt-3">
+
+                <div
+                class="progress-bar bg-success"
+                style="width: {{ avg_confidence }}%;">
+
+                {{ avg_confidence }}%
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- THREAT SUMMARY -->
+
+    <div class="card dashboard-card mt-4">
+
+        <div class="card-body">
+
+            <h4>
+
+                Threat Summary
+
+            </h4>
+
+            <p class="fs-5">
+
+                {{ fake_profiles }}
+                suspicious profile(s)
+                detected out of
+
+                {{ total_scans }}
+
+                total investigations.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CHART -->
+
+    <div class="card dashboard-card mt-4">
+
+        <div class="card-body">
+
+            <h4 class="text-center mb-4">
+
+                Profile Distribution
+
+            </h4>
+
+            <div class="chart-container">
+
+                <canvas id="profileChart">
+
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BUTTONS -->
+
+    <div class="text-center mt-4">
+
+        <a
+        href="/history"
+        class="btn btn-warning me-2">
+
+        View Scan History
+
+        </a>
+
+        <a
+        href="/"
+        class="btn btn-success">
+
+        Return to Analysis Portal
+
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+const ctx =
+document.getElementById(
+"profileChart"
+);
+
+new Chart(ctx, {
+
+    type:'pie',
+
+    data:{
+
+        labels:[
+            'Verified Profiles',
+            'Suspicious Profiles'
+        ],
+
+        datasets:[{
+
+            data:[
+                {{ real_profiles }},
+                {{ fake_profiles }}
+            ],
+
+            backgroundColor:[
+                '#22c55e',
+                '#ef4444'
+            ]
+
+        }]
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

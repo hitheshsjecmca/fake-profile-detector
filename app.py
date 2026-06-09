@@ -5,6 +5,7 @@ import joblib
 import pytesseract
 import numpy as np
 import spacy
+import sqlite3
 
 from flask import Flask, render_template, request
 from PIL import Image
@@ -45,7 +46,75 @@ def convert_to_number(text):
 @app.route("/")
 def home():
     return render_template("index.html")
+@app.route("/history")
+def history():
 
+    conn = sqlite3.connect("history.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT *
+    FROM scan_history
+    ORDER BY scan_date DESC
+    """)
+
+    records = cursor.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "history.html",
+        records=records
+    )
+
+
+@app.route("/dashboard")
+def dashboard():
+
+    conn = sqlite3.connect("history.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM scan_history")
+    total_scans = cursor.fetchone()[0]
+
+    cursor.execute("""
+    SELECT COUNT(*)
+    FROM scan_history
+    WHERE prediction='Real Profile'
+    """)
+    real_profiles = cursor.fetchone()[0]
+
+    cursor.execute("""
+    SELECT COUNT(*)
+    FROM scan_history
+    WHERE prediction='Fake Profile'
+    """)
+    fake_profiles = cursor.fetchone()[0]
+
+    cursor.execute("""
+    SELECT AVG(trust_score)
+    FROM scan_history
+    """)
+    avg_trust = round(cursor.fetchone()[0] or 0, 2)
+
+    cursor.execute("""
+    SELECT AVG(confidence)
+    FROM scan_history
+    """)
+    avg_confidence = round(cursor.fetchone()[0] or 0, 2)
+
+    conn.close()
+
+    return render_template(
+        "dashboard.html",
+        total_scans=total_scans,
+        real_profiles=real_profiles,
+        fake_profiles=fake_profiles,
+        avg_trust=avg_trust,
+        avg_confidence=avg_confidence
+    )
 
 @app.route("/upload", methods=["POST"])
 def upload():
@@ -359,6 +428,53 @@ def upload():
     print(result)
     print(confidence)
 
+    recommendations = []
+
+    if prediction == 1:
+
+        recommendations = [
+            "Avoid sharing personal information",
+            "Do not click suspicious links",
+            "Verify account authenticity before interaction",
+            "Report suspicious activity if detected"
+        ]
+
+    else:
+
+        recommendations = [
+            "Profile appears legitimate",
+            "Continue safe browsing practices",
+            "Always verify unknown contacts",
+            "Keep personal information protected"
+        ]
+
+        conn = sqlite3.connect("history.db")
+
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        INSERT INTO scan_history
+        (
+        username,
+        prediction,
+        confidence,
+        trust_score,
+        bot_probability
+        )
+        VALUES (?,?,?,?,?)
+        """,
+        (
+        username,
+        result,
+        confidence,
+        trust_score,
+        bot_probability
+        ))
+
+        conn.commit()
+
+        conn.close()
+
     return render_template(
     "result.html",
     username=username,
@@ -375,7 +491,8 @@ def upload():
     bot_probability=bot_probability,
     username_risk=username_risk,
     bio_risk=bio_risk,
-    reasons=reasons
+    reasons=reasons,
+    recommendations=recommendations,
 )
 
 if __name__ == "__main__":
